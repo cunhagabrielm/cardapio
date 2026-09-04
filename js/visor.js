@@ -103,12 +103,49 @@ const Visor = {
         `📏 Tamanho real: <strong>${l}</strong> de largura × <strong>${a}</strong> de ${eixo}`;
 
       this.atualizarDica();
+
+      /* Entregar o arquivo ao visor NÃO significa que ele já apareceu na tela:
+         o model-viewer ainda precisa ler o modelo e preparar o desenho. Se a
+         gente escondesse o "carregando" aqui, o cliente ficaria olhando um
+         quadrado vazio sem saber se travou. Então esperamos o aviso de pronto. */
+      const estado = await this.esperarModelo(el.visor);
+      if (estado === "sem-componente") {
+        el.regua.innerHTML += "<br>⚠️ O visualizador 3D não carregou — ele vem da " +
+                              "internet. Verifique a conexão e recarregue a página.";
+      } else if (estado !== "pronto") {
+        el.regua.innerHTML += "<br>⚠️ O modelo 3D demorou demais para abrir. " +
+                              "Tente abrir o prato de novo.";
+      }
     } catch (erro) {
       console.error(erro);
       el.regua.textContent = "Não consegui montar o modelo 3D deste prato.";
     } finally {
       el.carregando.classList.add("escondido");
     }
+  },
+
+  /* Espera o model-viewer avisar "load" (deu certo) ou "error" (falhou).
+     O limite de tempo evita que o aviso de carregando fique preso para sempre
+     numa conexão ruim. */
+  esperarModelo(visor, limiteMs = 20000) {
+    // Sem o script do model-viewer (sem internet, CDN bloqueado pela rede) a tag
+    // é só um elemento comum: não existe aviso nenhum para esperar.
+    if (!customElements.get("model-viewer")) return Promise.resolve("sem-componente");
+    if (visor.loaded) return Promise.resolve("pronto");
+
+    return new Promise((resolver) => {
+      const encerrar = (estado) => {
+        clearTimeout(relogio);
+        visor.removeEventListener("load", aoCarregar);
+        visor.removeEventListener("error", aoFalhar);
+        resolver(estado);
+      };
+      const aoCarregar = () => encerrar("pronto");
+      const aoFalhar = () => encerrar("falhou");
+      const relogio = setTimeout(() => encerrar("demorou"), limiteMs);
+      visor.addEventListener("load", aoCarregar);
+      visor.addEventListener("error", aoFalhar);
+    });
   },
 
   // Mensagem de ajuda conforme o aparelho do cliente
