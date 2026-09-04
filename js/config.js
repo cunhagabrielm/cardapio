@@ -14,7 +14,7 @@ const CONFIG = {
   // Deixe "" que o sistema usa o endereço que estiver aberto no navegador.
   // Depois de publicar no GitHub Pages, coloque aqui a URL final, por exemplo:
   // "https://gabrielmorais.github.io/cardapio/"
-  urlDoSite: "",
+  urlDoSite: "https://cunhagabrielm.github.io/cardapio/",
 
   // ---- Senha da ÁREA DO DONO ----------------------------------------------
   // Por segurança não guardamos a senha, e sim o "hash" SHA-256 dela.
