@@ -78,9 +78,15 @@
                                É isso que garante o TAMANHO REAL.
           ar-placement="floor" -> o objeto se apoia numa superfície horizontal
           camera-controls   -> deixa girar/aproximar com o dedo
+          loading="eager"   -> NÃO REMOVA. Por padrão o model-viewer só começa a
+                               carregar quando "enxerga" o elemento na tela. Como
+                               este visor nasce dentro de uma janela escondida,
+                               ele era marcado como invisível e o primeiro prato
+                               aberto nunca carregava (só funcionava a partir da
+                               segunda vez). "eager" manda carregar na hora.
       -->
       <model-viewer id="visor"
-        camera-controls touch-action="pan-y"
+        camera-controls touch-action="pan-y" loading="eager"
         ar ar-modes="webxr scene-viewer quick-look"
         ar-scale="fixed" ar-placement="floor"
         shadow-intensity="0.7" shadow-softness="0.8"

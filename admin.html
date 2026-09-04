@@ -245,7 +245,9 @@
     <button class="janela__fechar" data-fechar aria-label="Fechar">✕</button>
     <div class="puxador"></div>
     <div class="visor-area">
-      <model-viewer id="visor" camera-controls touch-action="pan-y"
+      <!-- loading="eager": ver a explicação no index.html — sem isso o primeiro
+           modelo aberto depois de carregar a página nunca aparece. -->
+      <model-viewer id="visor" camera-controls touch-action="pan-y" loading="eager"
         ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
         shadow-intensity="0.7" exposure="1.05" environment-image="neutral" alt="Modelo 3D do prato">
         <button slot="ar-button" class="btn btn-ar">📱 Ver no meu ambiente</button>
