@@ -1,0 +1,59 @@
+{
+  "versao": 1,
+  "atualizado_em": "2026-09-03",
+  "categorias": ["Pizzas", "Lanches", "Bebidas", "Sobremesas"],
+  "itens": [
+    {
+      "id": "pizza-marguerita",
+      "nome": "Pizza Marguerita",
+      "descricao": "Molho de tomate italiano, mussarela de búfala, manjericão fresco e azeite extravirgem. Massa de fermentação natural de 48 horas.",
+      "preco": 59.9,
+      "categoria": "Pizzas",
+      "foto": "fotos/pizza-marguerita.png",
+      "largura_cm": 35,
+      "altura_cm": 35,
+      "orientacao": "mesa",
+      "destaque": true,
+      "ativo": true
+    },
+    {
+      "id": "hamburguer-artesanal",
+      "nome": "Hambúrguer Artesanal",
+      "descricao": "Blend de 180 g, queijo cheddar maturado, alface americana, tomate e maionese da casa no pão brioche.",
+      "preco": 42.0,
+      "categoria": "Lanches",
+      "foto": "fotos/hamburguer-artesanal.png",
+      "largura_cm": 13,
+      "altura_cm": 13,
+      "orientacao": "empe",
+      "destaque": true,
+      "ativo": true
+    },
+    {
+      "id": "suco-de-laranja",
+      "nome": "Suco de Laranja 500 ml",
+      "descricao": "Laranja pera espremida na hora, sem açúcar e sem água. Servido no copo alto com gelo.",
+      "preco": 14.5,
+      "categoria": "Bebidas",
+      "foto": "fotos/suco-de-laranja.png",
+      "largura_cm": 10.5,
+      "altura_cm": 15,
+      "orientacao": "empe",
+      "destaque": false,
+      "ativo": true
+    },
+    {
+      "id": "pudim-de-leite",
+      "nome": "Pudim de Leite",
+      "descricao": "Receita da casa, com calda de caramelo queimado. Porção individual servida gelada.",
+      "preco": 18.0,
+      "categoria": "Sobremesas",
+      "foto": "fotos/pudim-de-leite.png",
+      "largura_cm": 14,
+      "altura_cm": 14,
+      "orientacao": "mesa",
+      "destaque": false,
+      "ativo": true
+    }
+  ]
+}
