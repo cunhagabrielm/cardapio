@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover + user-scalable=no deixa a experiência com cara de app no celular -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d8471f">
+<title>Cardápio 3D e Realidade Aumentada</title>
+<meta name="description" content="Veja cada prato em 3D e no tamanho real, na sua própria mesa, antes de pedir.">
+<link rel="stylesheet" href="css/estilo.css">
+
+<!--
+  <model-viewer> é o componente do Google que faz TODO o trabalho pesado de 3D e
+  Realidade Aumentada. Ao carregar este script, a tag <model-viewer> passa a
+  existir no HTML como se fosse nativa do navegador.
+  Precisa de internet. Para usar offline, baixe o arquivo e troque o src por
+  "js/vendor/model-viewer.min.js".
+-->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+
+<!-- Faixa que só aparece quando o dono está vendo a PRÉVIA do rascunho -->
+<div class="aviso escondido" id="avisoPrevia">
+  👁️ Prévia do rascunho — os clientes ainda não veem estas alterações.
+</div>
+
+<!-- ============================ CABEÇALHO ============================== -->
+<header class="cabecalho">
+  <div class="cabecalho__linha">
+    <div class="marca">
+      <div class="marca__icone" id="marcaIcone">🍽️</div>
+      <div>
+        <div class="marca__nome" id="marcaNome">Cardápio</div>
+        <div class="marca__sub" id="marcaSub">3D e Realidade Aumentada</div>
+      </div>
+    </div>
+    <div class="cabecalho__acoes">
+      <button class="icone-btn" id="btnQRTopo" title="QR Code do cardápio" aria-label="QR Code do cardápio">▦</button>
+      <a class="icone-btn" href="admin.html" title="Área do dono" aria-label="Área do dono">🔒</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== CONTEÚDO ============================= -->
+<main class="container">
+
+  <section class="filtros">
+    <div class="busca">
+      🔍
+      <input type="search" id="busca" placeholder="Buscar prato, ingrediente..." aria-label="Buscar no cardápio">
+    </div>
+    <div class="categorias" id="categorias"></div>
+  </section>
+
+  <!-- Os cartões dos pratos são criados por JavaScript em js/cardapio.js -->
+  <div class="grade" id="grade"></div>
+
+</main>
+
+<button class="btn flutuante" id="btnQR">▦ &nbsp;QR do cardápio</button>
+
+<!-- ================== JANELA DE UM PRATO (3D + RA) ==================== -->
+<div class="janela" id="janelaItem" hidden>
+  <div class="janela__caixa">
+    <button class="janela__fechar" data-fechar aria-label="Fechar">✕</button>
+    <div class="puxador"></div>
+
+    <div class="visor-area">
+      <!--
+        Atributos que importam:
+          ar                -> liga a Realidade Aumentada
+          ar-modes          -> tecnologias, na ordem de preferência
+                               webxr (Android no navegador) / scene-viewer (app do
+                               Google) / quick-look (iPhone)
+          ar-scale="fixed"  -> IMPEDE o cliente de redimensionar o modelo.
+                               É isso que garante o TAMANHO REAL.
+          ar-placement="floor" -> o objeto se apoia numa superfície horizontal
+          camera-controls   -> deixa girar/aproximar com o dedo
+      -->
+      <model-viewer id="visor"
+        camera-controls touch-action="pan-y"
+        ar ar-modes="webxr scene-viewer quick-look"
+        ar-scale="fixed" ar-placement="floor"
+        shadow-intensity="0.7" shadow-softness="0.8"
+        exposure="1.05" environment-image="neutral"
+        alt="Modelo 3D do prato em tamanho real">
+        <button slot="ar-button" class="btn btn-ar">📱 Ver no meu ambiente</button>
+      </model-viewer>
+      <div class="visor__carregando escondido" id="visorCarregando">Montando o modelo 3D…</div>
+    </div>
+
+    <div class="regua" id="regua"></div>
+
+    <h2 id="itemNome"></h2>
+    <div class="janela__preco" id="itemPreco"></div>
+    <p class="janela__desc" id="itemDesc"></p>
+
+    <div class="janela__acoes">
+      <button class="btn btn--suave" id="btnOrientacao">🔄 Deitar / levantar</button>
+      <a class="btn" id="btnPedir" target="_blank" rel="noopener">💬 Pedir no WhatsApp</a>
+    </div>
+
+    <div class="dica" id="dicaRA"></div>
+  </div>
+</div>
+
+<!-- ========================= JANELA DO QR CODE ======================== -->
+<div class="janela" id="janelaQR" hidden>
+  <div class="janela__caixa qr-area">
+    <button class="janela__fechar" data-fechar aria-label="Fechar">✕</button>
+    <div class="puxador"></div>
+    <h2>Cardápio digital</h2>
+    <p class="janela__desc">Aponte a câmera do celular para abrir o cardápio em 3D.</p>
+    <canvas id="qrCanvas" width="512" height="512"></canvas>
+    <div class="qr-url" id="qrUrl"></div>
+    <div class="janela__acoes">
+      <button class="btn btn--suave" id="btnCopiarLink">🔗 Copiar link</button>
+      <button class="btn" id="btnBaixarQR">⬇️ Baixar PNG</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== SCRIPTS ============================== -->
+<!-- A ORDEM IMPORTA: cada arquivo usa o que foi definido nos anteriores. -->
+<script src="js/config.js"></script>
+<script src="js/dados.js"></script>
+<script src="js/zip.js"></script>
+<script src="js/modelo3d.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/visor.js"></script>
+<script src="js/cardapio.js"></script>
+</body>
+</html>

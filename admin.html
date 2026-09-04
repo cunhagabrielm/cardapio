@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#d8471f">
+<meta name="robots" content="noindex, nofollow">
+<title>Área do dono — Cardápio</title>
+<link rel="stylesheet" href="css/estilo.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+
+<!-- ======================= TELA 1: LOGIN ============================== -->
+<div class="centralizado" id="telaLogin">
+  <form class="painel" id="formLogin">
+    <div class="marca" style="margin-bottom:18px">
+      <div class="marca__icone">🔒</div>
+      <div>
+        <div class="marca__nome">Área do dono</div>
+        <div class="marca__sub">Acesso restrito</div>
+      </div>
+    </div>
+    <p>Entre para cadastrar e editar os pratos do cardápio.</p>
+    <label class="campo">
+      <span>Senha</span>
+      <input type="password" id="senha" autocomplete="current-password" required>
+    </label>
+    <div class="erro" id="erroLogin"></div>
+    <button class="btn" style="width:100%" type="submit">Entrar</button>
+    <p style="margin-top:16px;font-size:.8rem">
+      Senha inicial: <code>admin123</code> — troque na aba Configurações.
+      <br><a href="index.html">← Voltar ao cardápio</a>
+    </p>
+  </form>
+</div>
+
+<!-- ======================= TELA 2: PAINEL ============================= -->
+<div id="telaPainel" class="escondido">
+
+  <header class="cabecalho">
+    <div class="cabecalho__linha">
+      <div class="marca">
+        <div class="marca__icone">⚙️</div>
+        <div>
+          <div class="marca__nome">Área do dono</div>
+          <div class="marca__sub" id="statusRascunho">rascunho local</div>
+        </div>
+      </div>
+      <div class="cabecalho__acoes">
+        <a class="btn btn--vazado btn--pequeno" id="btnPrevia" target="_blank">👁️ Prévia</a>
+        <button class="btn btn--suave btn--pequeno" id="btnSair">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-bottom:60px">
+
+    <div class="abas" role="tablist">
+      <button class="aba" role="tab" data-aba="pratos" aria-selected="true">🍕 Pratos</button>
+      <button class="aba" role="tab" data-aba="novo" aria-selected="false">➕ Cadastrar</button>
+      <button class="aba" role="tab" data-aba="qr" aria-selected="false">▦ QR Code</button>
+      <button class="aba" role="tab" data-aba="publicar" aria-selected="false">🚀 Publicar</button>
+      <button class="aba" role="tab" data-aba="config" aria-selected="false">🔧 Configurações</button>
+    </div>
+
+    <!-- ---------------------------------------------------- ABA PRATOS -->
+    <section class="painel painel--largo" id="abaPratos">
+      <h2>Pratos cadastrados</h2>
+      <p id="resumoPratos"></p>
+      <div id="listaPratos"></div>
+    </section>
+
+    <!-- ----------------------------------------------------- ABA NOVO -->
+    <section class="painel painel--largo escondido" id="abaNovo">
+      <h2 id="tituloForm">Cadastrar prato</h2>
+      <p>As medidas em centímetros são o que faz a Realidade Aumentada mostrar o prato no tamanho certo.</p>
+
+      <form id="formItem">
+        <input type="hidden" id="itemId">
+
+        <label class="campo">
+          <span>Nome do prato *</span>
+          <input id="fNome" required maxlength="60" placeholder="Ex.: Pizza Marguerita">
+        </label>
+
+        <label class="campo">
+          <span>Descrição</span>
+          <textarea id="fDesc" maxlength="280" placeholder="Ingredientes, porção, diferenciais..."></textarea>
+        </label>
+
+        <div class="dupla">
+          <label class="campo">
+            <span>Preço (R$) *</span>
+            <input id="fPreco" type="number" step="0.01" min="0" required placeholder="59,90">
+          </label>
+          <label class="campo">
+            <span>Categoria *</span>
+            <input id="fCategoria" list="listaCategorias" required placeholder="Pizzas">
+            <datalist id="listaCategorias"></datalist>
+          </label>
+        </div>
+
+        <!-- ------------------------------------------------------ FOTO -->
+        <div class="bloco" style="background:var(--fundo)">
+          <h2 style="font-size:.95rem">Foto do prato</h2>
+          <p style="font-size:.82rem">
+            Prefira <strong>PNG com fundo transparente</strong> (foto recortada): na Realidade
+            Aumentada o prato flutua sobre a mesa em vez de aparecer dentro de um retângulo branco.
+          </p>
+
+          <label class="campo">
+            <span>Enviar do computador <small>— fica salva dentro do rascunho</small></span>
+            <input type="file" id="fArquivo" accept="image/png,image/jpeg,image/webp">
+          </label>
+
+          <label class="campo">
+            <span>ou caminho da foto já publicada <small>— recomendado para muitos pratos</small></span>
+            <input id="fCaminho" placeholder="fotos/pizza-marguerita.png">
+          </label>
+
+          <img class="previa-foto escondido" id="previaFoto" alt="Prévia da foto">
+          <div id="infoFoto" style="font-size:.8rem;color:var(--texto-fraco);margin-top:8px"></div>
+        </div>
+
+        <!-- -------------------------------------------------- MEDIDAS -->
+        <div class="dupla">
+          <label class="campo">
+            <span>Largura real (cm) *</span>
+            <input id="fLargura" type="number" step="0.1" min="1" max="300" required placeholder="35">
+          </label>
+          <label class="campo">
+            <span>Altura/profundidade (cm) *</span>
+            <input id="fAltura" type="number" step="0.1" min="1" max="300" required placeholder="35">
+          </label>
+        </div>
+        <button type="button" class="btn btn--suave btn--pequeno" id="btnProporcao"
+                style="margin-bottom:16px">📐 Calcular pela proporção da foto</button>
+
+        <label class="campo">
+          <span>Como aparece na Realidade Aumentada *</span>
+          <select id="fOrientacao">
+            <option value="mesa">Deitado na mesa — para fotos tiradas de cima (pizza, prato)</option>
+            <option value="empe">Em pé — para fotos tiradas de lado (lanche, copo, garrafa)</option>
+          </select>
+        </label>
+
+        <div class="dupla">
+          <label class="campo" style="display:flex;gap:10px;align-items:center">
+            <input type="checkbox" id="fDestaque" style="width:auto"> <span style="margin:0">Marcar como destaque</span>
+          </label>
+          <label class="campo" style="display:flex;gap:10px;align-items:center">
+            <input type="checkbox" id="fAtivo" checked style="width:auto"> <span style="margin:0">Visível no cardápio</span>
+          </label>
+        </div>
+
+        <div class="erro" id="erroForm"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" type="submit">💾 Salvar prato</button>
+          <button class="btn btn--vazado" type="button" id="btnTestarRA">🧊 Testar em 3D</button>
+          <button class="btn btn--suave" type="button" id="btnLimparForm">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ------------------------------------------------------- ABA QR -->
+    <section class="painel painel--largo escondido" id="abaQR">
+      <h2>QR Code do cardápio</h2>
+      <p>Imprima e coloque nas mesas. Ao apontar a câmera, o cliente abre o cardápio em 3D.</p>
+      <label class="campo">
+        <span>Endereço que o QR vai abrir</span>
+        <input id="fURL" placeholder="https://seu-usuario.github.io/cardapio/">
+      </label>
+      <div class="qr-area">
+        <canvas id="qrAdminCanvas" width="512" height="512"></canvas>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <button class="btn btn--suave" id="btnGerarQR">🔄 Gerar</button>
+        <button class="btn" id="btnBaixarQRAdmin">⬇️ Baixar PNG</button>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------- ABA PUBLICAR -->
+    <section class="painel painel--largo escondido" id="abaPublicar">
+      <h2>Publicar o cardápio</h2>
+      <p>Tudo que você cadastrou está salvo apenas <strong>neste navegador</strong>.
+         Para os clientes verem, é preciso enviar os arquivos para o site.</p>
+
+      <div class="aviso-caixa">
+        <strong>Recomendado:</strong> baixe o <em>pacote completo</em>. Ele já vem com o
+        <code>cardapio.json</code>, as fotos e os modelos 3D (.glb e .usdz) prontos —
+        e com os modelos publicados a Realidade Aumentada funciona em todos os celulares.
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="btn" id="btnPacote">📦 Baixar pacote completo (.zip)</button>
+        <button class="btn btn--suave" id="btnJSON">📄 Baixar só o cardapio.json</button>
+        <button class="btn btn--vazado" id="btnImportar">📥 Importar cardapio.json</button>
+        <input type="file" id="fImportar" accept="application/json" class="escondido">
+      </div>
+      <div id="statusPacote" style="font-size:.86rem;color:var(--texto-fraco);margin-bottom:20px"></div>
+
+      <h2 style="font-size:1rem">Como publicar no GitHub Pages</h2>
+      <ol class="passos">
+        <li>Descompacte o <code>.zip</code> baixado.</li>
+        <li>Copie as pastas <code>dados/</code>, <code>fotos/</code> e <code>modelos/</code> por cima das do seu projeto.</li>
+        <li>No GitHub: <em>Add file → Upload files</em>, arraste as pastas e clique em <em>Commit changes</em>.</li>
+        <li>Espere cerca de 1 minuto e recarregue o site com <kbd>Ctrl</kbd>+<kbd>F5</kbd>.</li>
+      </ol>
+
+      <hr style="border:0;border-top:1px solid var(--borda);margin:20px 0">
+      <button class="btn btn--perigo btn--pequeno" id="btnApagarTudo">🗑️ Apagar o rascunho deste navegador</button>
+    </section>
+
+    <!-- ---------------------------------------------------- ABA CONFIG -->
+    <section class="painel painel--largo escondido" id="abaConfig">
+      <h2>Configurações</h2>
+      <p>Estes valores ficam no arquivo <code>js/config.js</code> — edite lá e envie para o GitHub.</p>
+
+      <div class="bloco" style="background:var(--fundo)">
+        <h2 style="font-size:.95rem">Trocar a senha da área do dono</h2>
+        <p style="font-size:.82rem">Digite a senha nova. O site nunca guarda a senha:
+           guarda só este código embaralhado (hash SHA-256).</p>
+        <label class="campo">
+          <span>Senha nova</span>
+          <input id="fSenhaNova" type="text" placeholder="mínimo 6 caracteres">
+        </label>
+        <button class="btn btn--suave btn--pequeno" id="btnGerarHash">Gerar código</button>
+        <div class="qr-url" id="saidaHash" style="margin-top:12px;display:none"></div>
+      </div>
+
+      <div class="bloco" style="background:var(--fundo)">
+        <h2 style="font-size:.95rem">Dados atuais</h2>
+        <div id="infoConfig" style="font-size:.86rem;color:var(--texto-fraco)"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ================= JANELA DE TESTE 3D (mesma do cardápio) =========== -->
+<div class="janela" id="janelaItem" hidden>
+  <div class="janela__caixa">
+    <button class="janela__fechar" data-fechar aria-label="Fechar">✕</button>
+    <div class="puxador"></div>
+    <div class="visor-area">
+      <model-viewer id="visor" camera-controls touch-action="pan-y"
+        ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
+        shadow-intensity="0.7" exposure="1.05" environment-image="neutral" alt="Modelo 3D do prato">
+        <button slot="ar-button" class="btn btn-ar">📱 Ver no meu ambiente</button>
+      </model-viewer>
+      <div class="visor__carregando escondido" id="visorCarregando">Montando o modelo 3D…</div>
+    </div>
+    <div class="regua" id="regua"></div>
+    <h2 id="itemNome"></h2>
+    <div class="janela__preco" id="itemPreco"></div>
+    <p class="janela__desc" id="itemDesc"></p>
+    <div class="janela__acoes">
+      <button class="btn btn--suave" id="btnOrientacao">🔄 Deitar / levantar</button>
+      <a class="btn escondido" id="btnPedir" target="_blank" rel="noopener">💬 WhatsApp</a>
+    </div>
+    <div class="dica" id="dicaRA"></div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/dados.js"></script>
+<script src="js/zip.js"></script>
+<script src="js/modelo3d.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/visor.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
