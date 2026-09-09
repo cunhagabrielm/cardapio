@@ -1,7 +1,13 @@
 {
   "versao": 1,
-  "atualizado_em": "2026-09-03",
-  "categorias": ["Pizzas", "Lanches", "Bebidas", "Sobremesas"],
+  "atualizado_em": "2026-09-04",
+  "categorias": [
+    "Pizzas",
+    "Lanches",
+    "Bebidas",
+    "Sobremesas",
+    "Artesanos"
+  ],
   "itens": [
     {
       "id": "pizza-marguerita",
@@ -14,20 +20,24 @@
       "altura_cm": 35,
       "orientacao": "mesa",
       "destaque": true,
-      "ativo": true
+      "ativo": true,
+      "modelo_glb": "modelos/pizza-marguerita.glb",
+      "modelo_usdz": "modelos/pizza-marguerita.usdz"
     },
     {
       "id": "hamburguer-artesanal",
       "nome": "Hambúrguer Artesanal",
       "descricao": "Blend de 180 g, queijo cheddar maturado, alface americana, tomate e maionese da casa no pão brioche.",
-      "preco": 42.0,
+      "preco": 42,
       "categoria": "Lanches",
       "foto": "fotos/hamburguer-artesanal.png",
       "largura_cm": 13,
       "altura_cm": 13,
       "orientacao": "empe",
       "destaque": true,
-      "ativo": true
+      "ativo": true,
+      "modelo_glb": "modelos/hamburguer-artesanal.glb",
+      "modelo_usdz": "modelos/hamburguer-artesanal.usdz"
     },
     {
       "id": "suco-de-laranja",
@@ -40,20 +50,39 @@
       "altura_cm": 15,
       "orientacao": "empe",
       "destaque": false,
-      "ativo": true
+      "ativo": true,
+      "modelo_glb": "modelos/suco-de-laranja.glb",
+      "modelo_usdz": "modelos/suco-de-laranja.usdz"
     },
     {
       "id": "pudim-de-leite",
       "nome": "Pudim de Leite",
       "descricao": "Receita da casa, com calda de caramelo queimado. Porção individual servida gelada.",
-      "preco": 18.0,
+      "preco": 18,
       "categoria": "Sobremesas",
       "foto": "fotos/pudim-de-leite.png",
       "largura_cm": 14,
       "altura_cm": 14,
       "orientacao": "mesa",
       "destaque": false,
-      "ativo": true
+      "ativo": true,
+      "modelo_glb": "modelos/pudim-de-leite.glb",
+      "modelo_usdz": "modelos/pudim-de-leite.usdz"
+    },
+    {
+      "id": "artesano-basca",
+      "nome": "Artesano Basca",
+      "descricao": "Pão especial parmesão, queijo muçarela, bacon, calabresa e finalização em um cheddar delicioso!",
+      "preco": 18,
+      "categoria": "Artesanos",
+      "foto": "fotos/artesano-basca.png",
+      "largura_cm": 10,
+      "altura_cm": 15,
+      "orientacao": "mesa",
+      "destaque": false,
+      "ativo": true,
+      "modelo_glb": "modelos/artesano-basca.glb",
+      "modelo_usdz": "modelos/artesano-basca.usdz"
     }
   ]
 }
